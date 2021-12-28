@@ -190,6 +190,9 @@ class ClientIDsField(BaseValidation):
 class BaseRequest:
     def __init__(self, body: Dict[str, Any]):
         self.body = body
+
+    def validate(self) -> None:
+        """Validate request"""
         for field_name, _type in self.__class__.__dict__.items():
             if not isinstance(_type, BaseValidation):
                 continue
@@ -199,15 +202,7 @@ class BaseRequest:
             # validate the field if required
             if not field.required and field_name not in self.body:
                 continue
-            try:
-                field.validate(field_value)
-            except CustomValidationError as e:
-                raise e
-
-        self.validate()
-
-    def validate(self):
-        pass
+            field.validate(field_value)
 
 
 class MethodRequest(BaseRequest):
@@ -236,6 +231,7 @@ class OnlineScoreRequest(BaseRequest):
     gender = GenderField(required=False, nullable=True)
 
     def validate(self):
+        super().validate()
         pairs = [
             (self.phone, self.email),
             (self.first_name, self.last_name),
@@ -272,6 +268,7 @@ def online_score_handler(
         return {"score": 42}, OK, ctx
 
     req = OnlineScoreRequest(method_args)
+    req.validate()
     score = get_score(
         store,
         phone=req.phone,
@@ -287,10 +284,11 @@ def online_score_handler(
 def clients_interests_handler(
     method_request: MethodRequest, ctx: Dict[str, Any], store
 ) -> Tuple[Any, int, Dict[str, Any]]:
-    r = ClientsInterestsRequest(method_request.arguments)
-    ctx["nclients"] = len(r.client_ids)
+    req = ClientsInterestsRequest(method_request.arguments)
+    req.validate()
+    ctx["nclients"] = len(req.client_ids)
     response = dict()
-    for client_id in r.client_ids:
+    for client_id in req.client_ids:
         response[client_id] = get_interests(store, client_id)
     return response, OK, ctx
 
@@ -304,8 +302,9 @@ def method_handler(
     }
     try:
         method_request = MethodRequest(request["body"])
+        method_request.validate()
         if not check_auth(method_request):
-            return ERRORS[FORBIDDEN], FORBIDDEN, ctx
+            return None, FORBIDDEN, ctx
         method = method_request.method
         if method not in routers:
             return f"Not found for {method}", NOT_FOUND, ctx
