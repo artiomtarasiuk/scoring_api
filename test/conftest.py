@@ -7,17 +7,19 @@ from storage import Storage
 @pytest.fixture(scope="session")
 def storage():
     s = Storage()
+    server = fakeredis.FakeServer()
+    s.client = fakeredis.FakeRedis(server=server)
     yield s
     s.client.flushdb()
     s.client.close()
 
 
 @pytest.fixture(scope="session")
-def fake_storage():
+def disconnected_storage():
     s = Storage()
     server = fakeredis.FakeServer()
     server.connected = False
-    s.client = fakeredis.FakeStrictRedis(server=server)
+    s.client = fakeredis.FakeRedis(server=server)
     yield s
     s.client.close()
 
