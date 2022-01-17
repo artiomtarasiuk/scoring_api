@@ -10,6 +10,7 @@ from optparse import OptionParser
 from typing import Any, Dict, Tuple
 
 from scoring import get_interests, get_score
+from storage import Storage
 
 SALT = "Otus"
 ADMIN_LOGIN = "admin"
@@ -317,7 +318,7 @@ def method_handler(
 
 class MainHTTPHandler(BaseHTTPRequestHandler):
     router = {"method": method_handler}
-    store = None
+    store = Storage()
 
     def get_request_id(self, headers):
         return headers.get("HTTP_X_REQUEST_ID", uuid.uuid4().hex)

@@ -1,9 +1,17 @@
 import hashlib
 import json
 
+from storage import Storage
+
 
 def get_score(
-    store, phone, email, birthday=None, gender=None, first_name=None, last_name=None
+    store: Storage,
+    phone,
+    email,
+    birthday=None,
+    gender=None,
+    first_name=None,
+    last_name=None,
 ):
     key_parts = [
         first_name or "",
@@ -30,6 +38,6 @@ def get_score(
     return score
 
 
-def get_interests(store, cid):
+def get_interests(store: Storage, cid):
     r = store.get("i:%s" % cid)
     return json.loads(r) if r else []
