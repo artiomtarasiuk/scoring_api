@@ -30,6 +30,12 @@ Request example:
 curl -X POST -H "Content-Type: application/json" -d '{"account": "artiom", "login": "artiom", "method": "clients_interests", "token":"b35f03795b596e841890d20400da50a204d4763a86cc5409a6e2db842323fa8e877bd8aa33b97994a370e8856e5ded7bd2e72ff86b8d7525d0d033173ce65919", "arguments": {"client_ids": [1,2,3,4], "date": "20.07.2017"}}' localhost:8080/method/
 ```
 
+# Storage (redis)
+
+Install [redis-py](https://github.com/redis/redis-py).
+
+redis-py requires a running Redis server. See [Redis's quickstart](https://redis.io/topics/quickstart) for installation instructions.
+
 # Testing
 
 Go to optional `Setup` step above and follow the instructions.

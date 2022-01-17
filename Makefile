@@ -1,7 +1,7 @@
 .PHONY: format check_format test
 .ONESHELL:
 
-check_dirs := .
+check_dirs := . test
 
 format:
 	black $(check_dirs)
@@ -12,4 +12,4 @@ check_format:
 	isort --check-only $(check_dirs)
 
 test: check_format
-	python -m unittest
+	pytest test

@@ -10,6 +10,7 @@ from optparse import OptionParser
 from typing import Any, Dict, Tuple
 
 from scoring import get_interests, get_score
+from storage import Storage
 
 SALT = "Otus"
 ADMIN_LOGIN = "admin"
@@ -268,12 +269,13 @@ def online_score_handler(
         return {"score": 42}, OK, ctx
 
     req = OnlineScoreRequest(method_args)
+    bd = req.birthday
     req.validate()
     score = get_score(
         store,
         phone=req.phone,
         email=req.email,
-        birthday=req.birthday,
+        birthday=bd.parse_date(req.birthday) if req.birthday else None,
         gender=req.gender,
         first_name=req.first_name,
         last_name=req.last_name,
@@ -317,7 +319,7 @@ def method_handler(
 
 class MainHTTPHandler(BaseHTTPRequestHandler):
     router = {"method": method_handler}
-    store = None
+    store = Storage()
 
     def get_request_id(self, headers):
         return headers.get("HTTP_X_REQUEST_ID", uuid.uuid4().hex)
