@@ -12,7 +12,7 @@ import api
 )
 def test_base_validation_required_invalid(value, required, nullable):
     field = api.BaseValidation(required, nullable)
-    with pytest.raises(api.CustomValidationError) as e:
+    with pytest.raises(api.CustomValidationError):
         field.validate(value)
 
 
@@ -38,7 +38,7 @@ def test_base_validation_required_valid(value, required, nullable):
 def test_base_validation_nullable_invalid(required, nullable):
     field = api.BaseValidation(required, nullable)
     for value in api.NULL_VALUES:
-        with pytest.raises(api.CustomValidationError) as e:
+        with pytest.raises(api.CustomValidationError):
             field.validate(value)
 
 
@@ -65,7 +65,7 @@ def test_base_validation_nullable_valid(required, nullable):
 )
 def test_char_field_invalid(value, required, nullable):
     field = api.CharField(required, nullable)
-    with pytest.raises(api.CustomValidationError) as e:
+    with pytest.raises(api.CustomValidationError):
         field.validate(value)
 
 
@@ -94,7 +94,7 @@ def test_char_field_valid(value, required, nullable):
 )
 def test_arguments_field_invalid(value, required, nullable):
     field = api.ArgumentsField(required, nullable)
-    with pytest.raises(api.CustomValidationError) as e:
+    with pytest.raises(api.CustomValidationError):
         field.validate(value)
 
 
@@ -120,7 +120,7 @@ def test_arguments_field_valid(value, required, nullable):
 )
 def test_email_field_invalid(value, required, nullable):
     field = api.EmailField(required, nullable)
-    with pytest.raises(api.CustomValidationError) as e:
+    with pytest.raises(api.CustomValidationError):
         field.validate(value)
 
 
@@ -148,7 +148,7 @@ def test_email_field_valid(value, required, nullable):
 )
 def test_phone_field_invalid(value, required, nullable):
     field = api.PhoneField(required, nullable)
-    with pytest.raises(api.CustomValidationError) as e:
+    with pytest.raises(api.CustomValidationError):
         field.validate(value)
 
 
@@ -177,7 +177,7 @@ def test_phone_field_valid(value, required, nullable):
 )
 def test_date_field_invalid(value, required, nullable):
     field = api.DateField(required, nullable)
-    with pytest.raises(api.CustomValidationError) as e:
+    with pytest.raises(api.CustomValidationError):
         field.validate(value)
 
 
@@ -200,7 +200,7 @@ def test_date_field_valid(value, required, nullable):
 )
 def test_birth_day_field_invalid(value, required, nullable):
     field = api.BirthDayField(required, nullable)
-    with pytest.raises(api.CustomValidationError) as e:
+    with pytest.raises(api.CustomValidationError):
         field.validate(value)
 
 
@@ -225,7 +225,7 @@ def test_birth_day_field_valid(value, required, nullable):
 )
 def test_gender_field_invalid(value, required, nullable):
     field = api.GenderField(required, nullable)
-    with pytest.raises(api.CustomValidationError) as e:
+    with pytest.raises(api.CustomValidationError):
         field.validate(value)
 
 
@@ -253,7 +253,7 @@ def test_gender_field_valid(value, required, nullable):
 )
 def test_client_ids_field_invalid(value, required, nullable):
     field = api.ClientIDsField(required, nullable)
-    with pytest.raises(api.CustomValidationError) as e:
+    with pytest.raises(api.CustomValidationError):
         field.validate(value)
 
 
@@ -261,7 +261,7 @@ def test_client_ids_field_invalid(value, required, nullable):
     "value, required, nullable",
     [
         ([0], True, True),
-        ([0,1,2], True, True),
+        ([0, 1, 2], True, True),
     ],
 )
 def test_client_ids_field_valid(value, required, nullable):
