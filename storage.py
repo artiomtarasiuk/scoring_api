@@ -22,7 +22,7 @@ def retry(use_cache: bool = False):
                 try:
                     return method(self, *args, **kwargs)
                 except redis.exceptions.ConnectionError as e:
-                    base_msg = f"Redis server is not available: {e}"
+                    base_msg = f"Redis server is not available: {e}."
                     if cnt > 1:
                         base_msg += f"\n Attempt {cnt} out of {retries}"
                     logging.info(base_msg)
