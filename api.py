@@ -269,12 +269,13 @@ def online_score_handler(
         return {"score": 42}, OK, ctx
 
     req = OnlineScoreRequest(method_args)
+    bd = req.birthday
     req.validate()
     score = get_score(
         store,
         phone=req.phone,
         email=req.email,
-        birthday=req.birthday,
+        birthday=bd.parse_date(req.birthday) if req.birthday else None,
         gender=req.gender,
         first_name=req.first_name,
         last_name=req.last_name,

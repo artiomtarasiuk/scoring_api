@@ -16,7 +16,10 @@ def get_key(
         phone or "",
         birthday.strftime("%Y%m%d") if birthday is not None else "",
     ]
-    return "uid:" + hashlib.md5("".join(key_parts).encode("utf-8")).hexdigest()
+    return (
+        "uid:"
+        + hashlib.md5("".join([str(v) for v in key_parts]).encode("utf-8")).hexdigest()
+    )
 
 
 def get_score(
