@@ -6,12 +6,18 @@ from typing import Any, Optional
 import redis
 
 
-def retry(retry_number: int = None):
+def retry(use_cache: bool = False):
     def retry_decorator(method):
         @functools.wraps(method)
         def retry_method(self, *args, **kwargs):
+            if use_cache:
+                try:
+                    return method(self, *args, **kwargs)
+                except Exception as e:
+                    logging.info(f"Cache is unavailable: {e}")
+                    return None
             cnt = 1
-            retries = retry_number or self.RETRY_NUMBER
+            retries = self.RETRY_NUMBER
             while cnt <= retries:
                 try:
                     return method(self, *args, **kwargs)
@@ -38,14 +44,14 @@ class Storage:
     def health_check(self) -> bool:
         return self.client.ping()
 
-    @retry
+    @retry(use_cache=True)
     def cache_set(self, key: str, value: Any, seconds: int) -> bool:
         return self.client.set(key, value, ex=seconds)
 
-    @retry
+    @retry(use_cache=False)
     def get(self, key: str) -> Any:
         return self.client.get(key)
 
-    @retry(retry_number=1)
+    @retry(use_cache=True)
     def cache_get(self, key: str) -> Optional[Any]:
         return self.client.get(key)
