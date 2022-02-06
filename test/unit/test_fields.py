@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 
 import api
@@ -26,7 +28,7 @@ def test_base_validation_required_invalid(value, required, nullable):
 )
 def test_base_validation_required_valid(value, required, nullable):
     field = api.BaseValidation(required, nullable)
-    field.validate(value)
+    assert not field.validate(value)
 
 
 @pytest.mark.parametrize(
@@ -51,7 +53,7 @@ def test_base_validation_nullable_invalid(required, nullable):
 def test_base_validation_nullable_valid(required, nullable):
     field = api.BaseValidation(required, nullable)
     for value in api.NULL_VALUES:
-        field.validate(value)
+        assert not field.validate(value)
 
 
 @pytest.mark.parametrize(
@@ -80,7 +82,7 @@ def test_char_field_invalid(value, required, nullable):
 )
 def test_char_field_valid(value, required, nullable):
     field = api.CharField(required, nullable)
-    field.validate(value)
+    assert not field.validate(value)
 
 
 @pytest.mark.parametrize(
@@ -109,7 +111,7 @@ def test_arguments_field_invalid(value, required, nullable):
 )
 def test_arguments_field_valid(value, required, nullable):
     field = api.ArgumentsField(required, nullable)
-    field.validate(value)
+    assert not field.validate(value)
 
 
 @pytest.mark.parametrize(
@@ -132,7 +134,7 @@ def test_email_field_invalid(value, required, nullable):
 )
 def test_email_field_valid(value, required, nullable):
     field = api.EmailField(required, nullable)
-    field.validate(value)
+    assert not field.validate(value)
 
 
 @pytest.mark.parametrize(
@@ -161,7 +163,7 @@ def test_phone_field_invalid(value, required, nullable):
 )
 def test_phone_field_valid(value, required, nullable):
     field = api.PhoneField(required, nullable)
-    field.validate(value)
+    assert not field.validate(value)
 
 
 @pytest.mark.parametrize(
@@ -182,14 +184,14 @@ def test_date_field_invalid(value, required, nullable):
 
 
 @pytest.mark.parametrize(
-    "value, required, nullable",
+    "value, required, nullable, expected",
     [
-        ("01.12.2022", True, True),
+        ("01.12.2022", True, True, datetime(2022, 12, 1).date()),
     ],
 )
-def test_date_field_valid(value, required, nullable):
+def test_date_field_valid(value, required, nullable, expected):
     field = api.DateField(required, nullable)
-    field.validate(value)
+    assert field.validate(value) == expected
 
 
 @pytest.mark.parametrize(
@@ -212,7 +214,7 @@ def test_birth_day_field_invalid(value, required, nullable):
 )
 def test_birth_day_field_valid(value, required, nullable):
     field = api.BirthDayField(required, nullable)
-    field.validate(value)
+    assert not field.validate(value)
 
 
 @pytest.mark.parametrize(
@@ -239,7 +241,7 @@ def test_gender_field_invalid(value, required, nullable):
 )
 def test_gender_field_valid(value, required, nullable):
     field = api.GenderField(required, nullable)
-    field.validate(value)
+    assert not field.validate(value)
 
 
 @pytest.mark.parametrize(
@@ -266,4 +268,4 @@ def test_client_ids_field_invalid(value, required, nullable):
 )
 def test_client_ids_field_valid(value, required, nullable):
     field = api.ClientIDsField(required, nullable)
-    field.validate(value)
+    assert not field.validate(value)
