@@ -10,7 +10,7 @@ from storage import Storage
 
 @pytest.fixture(scope="session")
 def storage():
-    s = Storage()
+    s = Storage(socket_timeout=120, socket_connect_timeout=60)
     server = fakeredis.FakeServer()
     s.client = fakeredis.FakeRedis(server=server)
     insert_interests_data(s, [0, 1, 2, 3])
@@ -28,7 +28,7 @@ def insert_interests_data(storage: Storage, cid_list: List[int]):
 
 @pytest.fixture(scope="session")
 def disconnected_storage():
-    s = Storage()
+    s = Storage(socket_timeout=120, socket_connect_timeout=60)
     server = fakeredis.FakeServer()
     server.connected = False
     s.client = fakeredis.FakeRedis(server=server)

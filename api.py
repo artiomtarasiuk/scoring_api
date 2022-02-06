@@ -319,7 +319,7 @@ def method_handler(
 
 class MainHTTPHandler(BaseHTTPRequestHandler):
     router = {"method": method_handler}
-    store = Storage()
+    store = Storage(socket_timeout=120, socket_connect_timeout=60)
 
     def get_request_id(self, headers):
         return headers.get("HTTP_X_REQUEST_ID", uuid.uuid4().hex)

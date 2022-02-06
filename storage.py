@@ -38,8 +38,10 @@ def retry(use_cache: bool = False):
 class Storage:
     RETRY_NUMBER = 5
 
-    def __init__(self):
-        self.client = redis.Redis()
+    def __init__(self, socket_timeout: int, socket_connect_timeout: int):
+        self.client = redis.Redis(
+            socket_timeout=socket_timeout, socket_connect_timeout=socket_connect_timeout
+        )
 
     def health_check(self) -> bool:
         return self.client.ping()

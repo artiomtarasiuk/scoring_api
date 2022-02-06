@@ -15,7 +15,7 @@ def test_disconnected_storage_health_check(disconnected_storage):
 
 def test_storage_cache_set(storage, storage_object):
     key = "key"
-    storage.cache_set(key=key, value=storage_object[key], seconds=1)
+    assert storage.cache_set(key=key, value=storage_object[key], seconds=1)
 
 
 def test_disconnected_storage_cache_set(disconnected_storage, storage_object):
